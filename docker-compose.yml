@@ -1,0 +1,44 @@
+version: '3'
+services:
+  php-apache:
+    restart: always
+    build:
+      context: ./sys
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./web:/var/www/html
+      - ./log/apache2:/var/log/apache2
+      - ./tmp:/tmp
+    links:
+      - mariadb
+
+  mariadb:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./db/mariadb:/var/lib/mysql
+      - ./log/mariadb:/var/log/mysql
+    ports:
+      - 3306:3306
+    environment:
+      TZ: "Asia/Jakarta"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "rootpwd"
+      MYSQL_USER: 'userdb'
+      MYSQL_PASSWORD: 'passdb'
+      MYSQL_DATABASE: 'cms_bluehrd'
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    restart: always
+    ports:
+      - "2292:80"
+    volumes:
+      - /sessions
+    links:
+      - mariadb
