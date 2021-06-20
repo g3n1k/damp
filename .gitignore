@@ -1,6 +1,1 @@
 !*.gitkeep
-web/*
-tmp/*
-log/apache/*
-log/mariadb/*
-db/*
