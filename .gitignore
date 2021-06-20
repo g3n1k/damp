@@ -1,1 +1,3 @@
 !*.gitkeep
+db/mariadb/*
+log/apache2/*
